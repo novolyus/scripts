@@ -1,0 +1,24 @@
+---
+- name: check commands
+  hosts: nexus
+  gather_facts: no
+
+
+  vars:
+    username: "{{ ansible_user }}"
+    password: "{{ ansible_ssh_pass }}"
+    host: "{{ inventory_hostname }}"
+    when: ansible_network_os == 'nxos'
+
+  tasks:
+      - name: run show version on remote devices
+        ios_command:
+          commands: show run
+        register: show_run
+
+      - name: Save config to file
+        copy:
+          content: "{{ show_run.stdout[0] }}"
+          dest: "{{inventory_hostname}}.txt"
+
+

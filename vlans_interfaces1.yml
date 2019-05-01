@@ -1,0 +1,26 @@
+- name: Ensure these VLANs are not being tagged on the trunk
+  hosts: nexus
+  gather_facts: no
+
+
+  vars:
+    nxos_provider:
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_ssh_pass }}"
+      host: "{{ inventory_hostname }}"
+      when: ansible_network_os == 'nxos'
+
+
+  tasks:
+
+      - name: Aggregate configure interfaces
+        nxos_l2_interface:
+         provider: "{{ nxos_provider }}"
+         aggregate:
+           - {name: "Eth2/11", trunk_vlans: 3-20} 
+           - {name: "Eth2/12", trunk_vlans: 3-20}
+           - {name: "Eth2/14", trunk_vlans: 3-20}
+         mode: trunk
+         state: absent
+  
+                              

@@ -1,0 +1,28 @@
+---
+- name: Vlan Provisioning
+  hosts: nexus
+  gather_facts: no
+
+  vars:
+    nxos_provider:
+      username: "{{ un }}"
+      password: "{{ pwd }}"
+      transport: nxapi
+      host: "{{ inventory_hostname }}"
+
+  tasks:
+
+    - name: CREATE VLANS AND ASSIGN A name
+      nxos_vlan:
+        vlan_id: "{{ item.vlan_id }}"
+        name: "{{ item.name }}"
+        provider: "{{ nxos_provider }}"
+      with_items:
+        - vlan_id: 2
+          name: Native
+        - vlan_id: 15
+          name: Web
+        - vlan_id: 20
+          name: App
+        - vlan_id: 30
+          name: DB
