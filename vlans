@@ -1,0 +1,18 @@
+- name: Ensure these VLANs are not being tagged on the trunk
+  hosts: SW1
+  gather_facts: no
+
+  tasks:
+    - name: Aggregate configure interfaces
+      ios_l2_interface:
+        aggregate:
+          - {name: "Eth2/11", trunk_allowed_vlans: 3-20} 
+          - {name: "Eth2/12", trunk_allowed_vlans: 3-20}
+          - {name: "Eth2/14", trunk_allowed_vlans: 3-20}
+        mode: trunk
+        state: present
+  
+  
+  
+#  ansible_connection: network_cli
+#  ansible_network_os: ios
